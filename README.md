@@ -23,14 +23,16 @@ Before using this skill, make sure a LaTeX distribution is installed on your sys
 Then clone this repository into your local skills directory:
 
 ```bash
-git clone https://github.com/<user>/paper-blueprint.git ~/.claude/skills/paper-blueprint
+git clone https://github.com/abdusa1am/paper-blueprint.git ~/.claude/skills/paper-blueprint
 ```
 
 or:
 
 ```bash
-git clone https://github.com/<user>/paper-blueprint.git ~/.codex/skills/paper-blueprint
+git clone https://github.com/abdusa1am/paper-blueprint.git ~/.codex/skills/paper-blueprint
 ```
+
+If you already cloned the repo elsewhere, you can also copy the `paper-blueprint/` folder into your local skills directory instead of cloning it again.
 
 ## Usage
 
