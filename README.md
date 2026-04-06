@@ -1,131 +1,237 @@
 # paper-blueprint
 
-**Plan once, write section by section with durable state.**
+**A harness-engineered paper planning skill for Codex/Claude that turns messy research materials into a clean, resumable LaTeX writing workspace.**
 
-`paper-blueprint` is a skill for the **setup phase** of an academic paper project in LaTeX. It turns scattered materials into a structured paper workspace with:
+`paper-blueprint` helps you set up an academic paper project **before drafting begins**.  
+Instead of jumping straight into prose, it builds a durable project structure with:
 
-- a clear manuscript plan
-- a canonical lightweight manifest for section structure and current status
+- a planned section outline
 - section-specific materials folders
-- reusable templates and helper scripts
-- state files for restartable later sessions
-- a deterministic setup validator before setup is considered done
+- restartable state files
+- a lightweight structural manifest
+- deterministic setup validation
 
-The skill is built on durable state and follows best practices in harness engineering, including intentional context management, bounded autonomy, and a clean handoff to subsequent writing sessions.
+The result is a paper workspace that is easier to resume, safer to iterate on, and much less likely to drift across AI sessions.
+
+---
+
+## Why this exists
+
+Most AI-assisted paper writing workflows fail for predictable reasons:
+
+- context gets bloated
+- the model forgets prior decisions
+- materials are scattered
+- section plans drift over time
+- the next session has no clean handoff
+
+`paper-blueprint` solves that by applying **harness engineering principles** to paper setup:
+
+- **externalize important state**
+- **keep context intentional**
+- **prefer bounded autonomy**
+- **validate deterministically**
+- **design for interruption and recovery**
+- **avoid state drift**
+
+---
+
+## What it does
+
+This skill helps Codex/Claude:
+
+- analyze notes, outlines, drafts, results, and figures
+- decide on a paper structure
+- initialize a LaTeX paper workspace
+- organize materials by section
+- create durable state files for future sessions
+- prepare a clean handoff for later section-by-section writing
+
+It is especially useful for:
+
+- survey papers
+- technical reports
+- research manuscripts
+- long, multi-session writing projects
+- AI-assisted LaTeX workflows
+
+---
+
+## What it does **not** do
+
+`paper-blueprint` is intentionally scoped.
+
+It does **not** aim to:
+
+- draft the full manuscript automatically
+- replace later writing/revision workflows
+- invent citations or unsupported claims
+- do final citation cleanup unless explicitly requested
+
+This is a **setup and planning skill**, not an end-to-end autonomous paper writer.
+
+---
+
+## Key features
+
+- **Durable on-disk state**
+  - `state/writing-plan.md`
+  - `state/project-map.md`
+  - `state/source-index.md`
+  - `state/checkpoint.md`
+  - `state/next-session-prompt.md`
+
+- **Canonical structural manifest**
+  - `state/plan.json` stores section IDs, order, paths, workflow state, and validator status
+
+- **Deterministic setup validation**
+  - `scripts/validate_setup.py` checks that setup is complete before handoff
+
+- **Resumable workflow**
+  - later sessions can continue from the paper project itself rather than reloading the entire skill
+
+- **LaTeX-first project structure**
+  - creates a minimal manuscript layout that can evolve into a real paper
+
+---
 
 ## Installation
 
-Before using this skill, make sure a LaTeX distribution is installed on your system.
+Before using this skill, make sure a LaTeX distribution is installed.
 
-- **Linux / WSL:** TeX Live quick install guide: <https://tug.org/texlive/quickinstall.html>
-- **macOS:** MacTeX download page: <https://www.tug.org/mactex/>
+- **Linux / WSL:** <https://tug.org/texlive/quickinstall.html>
+- **macOS:** <https://www.tug.org/mactex/>
 
-Then clone this repository into your local skills directory:
-
-```bash
-git clone https://github.com/abdusa1am/paper-blueprint.git ~/.claude/skills/paper-blueprint
-```
-
-or:
+Then clone the repo into your skills directory:
 
 ```bash
 git clone https://github.com/abdusa1am/paper-blueprint.git ~/.codex/skills/paper-blueprint
 ```
 
-If you already cloned the repo elsewhere, you can also copy the `paper-blueprint/` folder into your local skills directory instead of cloning it again.
+or:
 
-## Usage
+```bash
+git clone https://github.com/abdusa1am/paper-blueprint.git ~/.claude/skills/paper-blueprint
+```
 
-Open **Codex** or **Claude** in your terminal, then paste a prompt like this:
+If you already have the folder locally, you can also copy `paper-blueprint/` into your skills directory manually.
+
+---
+
+## Quick start
+
+Ask Codex or Claude to use the skill with your materials:
 
 ```text
 Use the paper-blueprint skill.
 
 Goal:
-Create a paper writing plan based on the following materials.
+Create a paper writing plan and initialize a LaTeX workspace from my materials.
 
 Style reference:
-- /path/to/style_reference_paper/ (ideally a LaTeX source version from the target journal, but a PDF also works)
+- /path/to/style_reference_paper/
 
 Content sources:
 - /path/to/notes.md
 - /path/to/outline.txt
 - /path/to/abstract_draft.md
-- /path/to/raw_draft.tex
 - /path/to/results.txt
 - /path/to/table1.csv
 - /path/to/plot1.png
 - /path/to/reference_list.md
 - /path/to/references.bib
-- /path/to/result1.png
 - /path/to/figure_overview.pdf
 ```
 
-Typical inputs include:
+---
 
-- notes, outlines, and abstract drafts
-- raw manuscript drafts
-- results, data, tables, and plots
-- reference lists or BibTeX files
-- user-provided figures
-- optional style reference papers
+## What gets created
 
-After setup is complete, review `./paper-folder-name/state/writing-plan.md`. If the plan does not fully match your intention, refine it with a follow-up prompt.
-
-## Continue in a new session
-
-Once the plan is finalized, resume from the paper project itself rather than from the full skill:
+After setup, a typical project contains:
 
 ```text
-Read ./paper-folder/state/next-session-prompt.md and continue.
+paper-project/
+├── main.tex
+├── sections/
+├── refs/
+│   └── references.bib
+├── materials/
+│   ├── original/
+│   ├── shared/
+│   └── 01-introduction/
+├── figures/
+├── build/
+│   └── snapshots/
+└── state/
+    ├── plan.json
+    ├── writing-plan.md
+    ├── project-map.md
+    ├── source-index.md
+    ├── checkpoint.md
+    ├── next-session-prompt.md
+    ├── section-summaries.md
+    └── session-log.md
 ```
 
-Later sessions should then follow the order in:
+---
 
-- `state/next-session-prompt.md`
-- `state/plan.json`
-- `references/session-protocol.md`
+## Setup workflow
 
-## Why use this workflow
+The skill is designed around a clean first-session workflow:
 
-- **Better focus per session.** Later sessions can write one section at a time instead of re-planning the whole paper.
-- **Better recovery.** A new session can resume from state files instead of rebuilding context from chat history.
-- **Lower drift.** The paper structure, materials map, and next-step instructions live on disk.
-- **Safer setup.** The skill includes a machine-readable manifest plus a deterministic validator for section coverage, material traceability, and next-session readiness.
+1. read and analyze the provided materials
+2. decide the paper structure
+3. assign stable section IDs
+4. initialize the workspace
+5. organize materials by section
+6. create the writing plan and project map
+7. wire `main.tex`
+8. generate the next-session handoff
+9. run deterministic setup validation
 
-## Main project artifacts
+Setup should end only after:
 
-After setup, the paper project should contain state such as:
+```bash
+python scripts/validate_setup.py --project-dir /path/to/paper-project
+```
 
-- `state/plan.json`
-- `state/writing-plan.md`
-- `state/project-map.md`
-- `state/source-index.md`
-- `state/checkpoint.md`
-- `state/next-session-prompt.md`
-- `state/section-summaries.md`
+passes.
 
-Optional when needed:
+---
 
-- `state/style-analysis.md`
+## Why the workflow is different
 
-## Bundled resources
+Unlike simple prompt-only workflows, `paper-blueprint` treats setup as a **stateful engineering task**.
+
+That means:
+
+- important decisions live in files, not chat memory
+- the next session has a clear target
+- materials are traceable
+- section structure is explicit
+- setup can be validated before drafting starts
+
+This makes the workflow better for long-running and interruption-prone projects.
+
+---
+
+## Main bundled resources
 
 ### Scripts
 
-- `scripts/init_paper_workspace.py` — initialize the project structure
-- `scripts/validate_setup.py` — run deterministic setup validation
-- `scripts/compile_paper.py` — compile the paper later
-- `scripts/render_pdf_pages.py` — render PNG page snapshots later
-- `scripts/quality_check.py` — lightweight quality checks later
-- `scripts/verify_citations.py` — citation consistency checks later
-- `scripts/session_status.py` — summarize resume status later
-- `scripts/compact_checkpoint.py` — refresh checkpoint and handoff files later
+- `scripts/init_paper_workspace.py`
+- `scripts/validate_setup.py`
+- `scripts/compile_paper.py`
+- `scripts/render_pdf_pages.py`
+- `scripts/quality_check.py`
+- `scripts/verify_citations.py`
+- `scripts/session_status.py`
+- `scripts/compact_checkpoint.py`
 
 ### Templates
 
-- `templates/writing-plan-template.md`
 - `templates/plan-template.json`
+- `templates/writing-plan-template.md`
 - `templates/project-map-template.md`
 - `templates/source-index-template.md`
 - `templates/checkpoint-template.md`
@@ -135,27 +241,51 @@ Optional when needed:
 
 ### Reference
 
-- `references/session-protocol.md` — canonical resume and later-writing workflow
+- `references/session-protocol.md`
 
-## Setup completion standard
+---
 
-The setup phase should end only after lightweight validation gates pass, including:
+## Resume in a later session
 
-- workspace integrity
-- section coverage
-- material traceability
-- template integration
-- cross-file consistency
-- next-session readiness
+After setup, do **not** reload the whole skill by default.
 
-In practice, this means the setup session should run:
+Instead, resume from the project itself:
 
-```bash
-python scripts/validate_setup.py --project-dir /path/to/paper-project
+```text
+Read ./paper-folder/state/next-session-prompt.md and continue.
 ```
 
-## Notes
+Later sessions should primarily follow:
 
-- This skill is for **setup and planning**, not automatic full-paper drafting.
-- It is intentionally lightweight in the main `SKILL.md`; detailed structure lives in templates, scripts, and project state files.
-- It is suitable for use across different AI sessions as long as the paper project files persist on disk.
+1. `state/next-session-prompt.md`
+2. `state/project-map.md`
+3. `state/plan.json`
+4. `state/writing-plan.md`
+5. `references/session-protocol.md`
+
+---
+
+## Best fit
+
+`paper-blueprint` is a strong fit if you want:
+
+- AI-assisted academic writing with better structure
+- resumable paper sessions
+- less context drift
+- a LaTeX-first workflow
+- a setup process aligned with harness-engineering ideas
+
+---
+
+## Release
+
+Current release: **v1.0.0**
+
+See the release page here:  
+<https://github.com/abdusa1am/paper-blueprint/releases/tag/v1.0.0>
+
+---
+
+## License
+
+MIT License
