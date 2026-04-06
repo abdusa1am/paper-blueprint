@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "execution_mode": "single_agent",
+  "workflow_state": "setup_in_progress",
+  "title": "{{TITLE}}",
+  "paper_type": "TBD",
+  "venue_style": "TBD",
+  "template_source": "TBD",
+  "current_target": "TBD",
+  "sections": [],
+  "validation": {
+    "setup_validator": "not_run",
+    "last_run_date": null,
+    "status": "unknown",
+    "notes": []
+  }
+}
